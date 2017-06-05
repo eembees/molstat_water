@@ -1,0 +1,4 @@
+Links for use in water project
+http://www.lfd.uci.edu/~gohlke/code/transformations.py.html
+https://stackoverflow.com/questions/17763655/rotation-of-a-point-in-3d-about-an-arbitrary-axis-using-python
+https://github.com/pele-python/pele/blob/master/pele/utils/xyz.py
