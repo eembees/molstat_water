@@ -70,9 +70,10 @@ def divide(elements, coordinates):
     return np.asarray(molecules)
 
 def unite(molecules):
-    """ 
+    """
     Unites coordinate list given molecule array as output from divide function
     Verified that united out array is identical to divide input array
+        June 4th 2017
     """
     n_molecules = len(molecules)
     coordinates = []
