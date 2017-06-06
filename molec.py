@@ -3,16 +3,16 @@ import pybel as pb
 import numpy as np
 
 global mol
-global forcefield
+global FF
 
 
-def get_energy():
+def get_energy(filename):
     """ Returns the MMFF94 energy of the molecule in kcal/mol.
     """
 
     global mol
 
-    mol = pb.readfile('xyz', 'w6.xyz').next()
+    mol = pb.readfile('xyz', filename).next()
 
     FF = ob.OBForceField.FindForceField("MMFF94")
     FF.Setup(mol.OBMol)
@@ -21,8 +21,8 @@ def get_energy():
 
 """
 def generate_chain(n):
-    """ #Generate a n-length carbon chain.
-    """
+""" #Generate a n-length carbon chain.
+"""
 
     global mol
 
@@ -31,10 +31,10 @@ def generate_chain(n):
     mol.addh()
     mol.make3D()
 
-
+"""
 def set_dihedral(angles):
-    """ #Set the dihedral angles of the carbon chain
-    """
+ #Set the dihedral angles of the carbon chain
+
 
     global mol
     global forcefield
@@ -43,7 +43,7 @@ def set_dihedral(angles):
     # constraints.AddDistanceConstraint(1, 10, 3.4)       # Angstroms
     # constraints.AddAngleConstraint(1, 2, 3, 120.0)      # Degrees
     # constraints.AddTorsionConstraint(1, 2, 3, 4, 180.0) # Degrees
-"""
+
 
     # Find all carbons
     smarts = pb.Smarts("C")
@@ -88,12 +88,12 @@ def find_local_min():
     """
 
     global mol
-    global forcefield
+    global FF
 
-
+    FF = ob.OBForceField.FindForceField("GAFF")
     # tested both 5 and 25 steps. As far as I remember, 5 steps were enough
-    forcefield.SteepestDescent(5)
-    forcefield.GetCoordinates(mol.OBMol)
+    FF.SteepestDescent(10)
+    FF.GetCoordinates(mol.OBMol)
 
 
 def save_molecule(filename):

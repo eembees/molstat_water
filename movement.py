@@ -33,7 +33,7 @@ def randommove(points, dist):
 
     # # Initiate movement
     newpoints = []              # # List of output points
-    print type(newpoints)
+    # print type(newpoints)
 
     for i in range(len(points)):
         newpoint = np.add(points[i], movement)
