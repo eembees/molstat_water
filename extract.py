@@ -81,3 +81,28 @@ def unite(molecules):
         for j in range(len(molecules[0])):
             coordinates.append(molecules[i][j])
     return np.asarray(coordinates)
+
+if __name__ == '__main__':
+    import filecmp
+    import movement as mov
+
+    a, b, c = readfile("w6.xyz")
+
+    # print c
+
+    c[:3] = mov.randommove(c[:3],5)
+
+
+    q = divide(b,c)
+
+    # print q, '\n', len(q), #'\n', type(q)
+
+    c_new = unite(q)
+
+    # print c_new
+
+    writefile("w6_2.xyz", a, b, c) # # Writing file
+
+    # # # Test if identical files
+    test = filecmp.cmp('w6.xyz','w6_2.xyz')
+    print test

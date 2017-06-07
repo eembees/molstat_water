@@ -63,3 +63,38 @@ def rotation3d(axis1, axis2, point, angle):
     newpoint = rot + axis1
 
     return newpoint
+
+if __name__ == '__main__':
+    import extract as ex
+
+    a, b, c = ex.readfile("w6.xyz") # # reading file
+
+    # Test for distances > paste this after rotation to see if the rotation  maintains accurate distance
+    '''
+    dlist = []
+
+    d = 0
+    for i in range(3):
+        d += c[1][i]-c[0][i]
+    d = np.sqrt(d)
+    dlist.append(d)
+
+    d = 0
+    for i in range(3):
+        d += c[1][i]-c[2][i]
+    d = np.sqrt(d)
+    dlist.append(d)
+
+    d = 0
+    for i in range(3):
+        d += c[0][i]-c[2][i]
+    d = np.sqrt(d)
+    dlist.append(d)
+
+    dist = np.sqrt(sum([i**2 for i in dlist]))
+
+    print "DISTANCE BEFORE: \n", dist
+    '''
+    c[1] = rotation3d(c[0], c[2], c[1], 1*pi)
+
+    ex.writefile("w6_rotated.xyz", a, b, c) # # Writing file

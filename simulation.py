@@ -18,14 +18,14 @@ import molec as mc
 """Running Script for simulation"""
 # # Defining universal variables
 # initial_energy = mc.get_energy()
-n_steps = 50
+n_steps = 5
 energies_before = []
 energies_after = []
 mol_name, elements, coordinates = ex.readfile('w6.xyz')
 molecules = ex.divide(elements, coordinates)
 d = 1
 writing = 1 # # CHANGE THIS TO 1 TO WRITE FILES
-
+optimize = 1
 
 
 """
@@ -34,30 +34,37 @@ First step: Creating series of randomly generated files
 
 for i in range(n_steps):
     # # Generating random value, deciding on rotation or movement
-    rot_not = np.random.choice([0,1])
+    # rot_not = np.random.choice([0,1])
+    rot_not = 1
 
     if rot_not == 1:
         """
         Rotates molecules by the same random angle.
         """
         n_molecules_rotating = np.random.randint(1,6)
-        angle = 2 * pi * np.random.rand()           # Consider randomizing angle completely
+        n_molecules_rotating = 1
+        angle = 1*pi
+        # angle = 2 * pi * np.random.rand()           # Consider randomizing angle completely
         for j in range(n_molecules_rotating):
-            # # Defining which molecule rotates
+            # # Defining which molecule and which atom rotates
             rot_mol_num = np.random.choice(6)
-            rot_mol_cor = molecules[rot_mol_num]
-
-            # # Defining which atom rotates, and which are axes
             rot_atom_num = np.random.choice(3)
-            rot_atom = rot_mol_cor[rot_atom_num]
-            axis_1 = rot_mol_cor[(rot_atom_num + 1) % 3]
-            axis_2 = rot_mol_cor[(rot_atom_num + 2) % 3]
+
+            # # Defining which atoms are axes
+            axis_num_1 = (rot_atom_num + 1) % 3
+            axis_num_2 = (rot_atom_num + 2) % 3
+            print 'rotating:', rot_atom_num,'\n axes:', axis_num_1, axis_num_2
+
+            rot_atom = molecules[rot_mol_num][rot_atom_num]
+            # print rot_atom
+            axis_1 = copy.copy(molecules[rot_mol_num][axis_num_1])
+            axis_2 = copy.copy(molecules[rot_mol_num][axis_num_2])
 
             # # Executing rotation3d
             rot_atom_done = rot.rotation3d(axis_1, axis_2, rot_atom, angle)
+            # print rot_atom_done
             # # Restoring and rewriting coordinate of rotated atom
-            molecules[rot_mol_num][rot_atom_num] = rot_atom_done
-
+            molecules[rot_mol_num][rot_atom_num] = copy.copy(rot_atom_done)
             write_now = 1
 
     elif rot_not == 0:
@@ -74,6 +81,7 @@ for i in range(n_steps):
             mov_mol_new = mov.randommove(molecules[mov_mol_num], d)
 
             # print mov_mol_new
+
             # # Limiting movement
             if all(x < 0.0 for x in (mov_mol_new[0][0],
                                      mov_mol_new[1][0],
@@ -94,10 +102,13 @@ for i in range(n_steps):
                                       mov_mol_new[1][0],
                                       mov_mol_new[2][0])):
 
+            if writing == 1:
                 # Accept change:
                 molecules[mov_mol_num] = mov_mol_new
                 write_now = 1
             else:
+                # Do opposite transformation?
+
                 write_now = 0
             # molecules[mov_mol_num]
 
@@ -112,15 +123,16 @@ for i in range(n_steps):
 """
 PART II: optimizing energy of the xyz files
 """
-    # # Getting energy and optimizing
-for i in range(n_steps):
-    filename = "w6_%s" % i + ".xyz"
-    if os.path.isfile('./%s'%filename):
-        energies_before.append(mc.get_energy(filename))
+if optimize == 1:
+        # # Getting energy and optimizing
+    for i in range(n_steps):
+        filename = "w6_%s" % i + ".xyz"
+        if os.path.isfile('./%s'%filename):
+            energies_before.append(mc.get_energy(filename))
 
-        mc.find_local_min()
+            mc.find_local_min(5)
 
-        energies_after.append(mc.get_energy(filename))
-        mc.save_molecule(filename)
+            energies_after.append(mc.get_energy(filename))
+            mc.save_molecule(filename)
 
-print 'energies after are \n', np.asarray(energies_after), min(np.asarray(energies_after))
+    print 'Energies after are: \n', np.asarray(energies_after)#,'\nAnd the minimum is: ' min(np.asarray(energies_after))

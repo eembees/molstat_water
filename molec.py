@@ -83,7 +83,7 @@ def set_dihedral(angles):
     find_local_min()
 
 
-def find_local_min():
+def find_local_min(steps):
     """
     """
 
@@ -92,7 +92,7 @@ def find_local_min():
 
     FF = ob.OBForceField.FindForceField("GAFF")
     # tested both 5 and 25 steps. As far as I remember, 5 steps were enough
-    FF.SteepestDescent(10)
+    FF.SteepestDescent(steps)
     FF.GetCoordinates(mol.OBMol)
 
 

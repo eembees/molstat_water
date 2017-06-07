@@ -52,7 +52,7 @@ ohh_1_new = mov.randommove(ohh_1, 5)
 
 c[:3] = ohh_1_new
 """
-# c[:3] = mov.randommove(c[:3],5)
+c[:3] = mov.randommove(c[:3],5)
 
 # print c
 
@@ -89,7 +89,7 @@ dlist.append(d)
 print "DISTANCE AFTER: \n", dlist
 """
 
-# ex.writefile("w6_2.xyz", a, b, c) # # Writing file
+ex.writefile("w6_2.xyz", a, b, c) # # Writing file
 
 
 """
