@@ -2,6 +2,7 @@
 readfile -- Extracting values from .xyz file into arrays
 writefile-- Writing the the file from coordinates arrays
 divide   -- Categorizing array into subarrays
+unite    -- reunites the subarrays into main array
 """
 # # Import modules
 import numpy as np
@@ -84,14 +85,10 @@ def unite(molecules):
 
 if __name__ == '__main__':
     import filecmp
-    import movement as mov
 
     a, b, c = readfile("w6.xyz")
 
     # print c
-
-    c[:3] = mov.randommove(c[:3],5)
-
 
     q = divide(b,c)
 
@@ -105,4 +102,4 @@ if __name__ == '__main__':
 
     # # # Test if identical files
     test = filecmp.cmp('w6.xyz','w6_2.xyz')
-    print test
+    print 'Test for identical files:', test
