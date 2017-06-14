@@ -18,42 +18,58 @@ import molec as mc
 """Running Script for simulation"""
 # # Defining universal variables
 # initial_energy = mc.get_energy()
-n_steps = 5
+n_steps = 1000
 energies_before = []
 energies_after = []
 mol_name, elements, coordinates = ex.readfile('w6.xyz')
 molecules = ex.divide(elements, coordinates)
-d = 1
+d = 0.2
 writing = 1 # # CHANGE THIS TO 1 TO WRITE FILES
 optimize = 1
 
 
 """
-First step: Creating series of randomly generated files
+PART I: Creating series of randomly generated files (permutations of w6)
 """
 
 for i in range(n_steps):
     # # Generating random value, deciding on rotation or movement
-    # rot_not = np.random.choice([0,1])
-    rot_not = 1
+    rot_not = np.random.choice([0,1])
+    # rot_not = 1
 
     if rot_not == 1:
         """
         Rotates molecules by the same random angle.
         """
         n_molecules_rotating = np.random.randint(1,6)
-        n_molecules_rotating = 1
-        angle = 1*pi
-        # angle = 2 * pi * np.random.rand()           # Consider randomizing angle completely
+        # n_molecules_rotating = 1
+        # angle = 1*pi
+        angle = 2 * pi * np.random.rand()           # Consider randomizing angle completely
         for j in range(n_molecules_rotating):
             # # Defining which molecule and which atom rotates
             rot_mol_num = np.random.choice(6)
-            rot_atom_num = np.random.choice(3)
+            rot_atom_num = np.random.choice(2)+1
 
+            '''
             # # Defining which atoms are axes
             axis_num_1 = (rot_atom_num + 1) % 3
             axis_num_2 = (rot_atom_num + 2) % 3
-            print 'rotating:', rot_atom_num,'\n axes:', axis_num_1, axis_num_2
+            if axis_num_1 > axis_num_2:
+                axis_num_change = axis_num_1
+                axis_num_1 = axis_num_2
+                axis_num_2 = axis_num_change
+            '''
+            if rot_atom_num == 1:
+                axis_num_1 = 0
+                axis_num_2 = 2
+            if rot_atom_num == 0:
+                axis_num_1 = 2
+                axis_num_2 = 1
+            if rot_atom_num == 2:
+                axis_num_1 = 0
+                axis_num_2 = 1
+
+            # print 'rotating:', rot_atom_num,'\n axes:', axis_num_1, axis_num_2
 
             rot_atom = molecules[rot_mol_num][rot_atom_num]
             # print rot_atom
@@ -66,6 +82,7 @@ for i in range(n_steps):
             # # Restoring and rewriting coordinate of rotated atom
             molecules[rot_mol_num][rot_atom_num] = copy.copy(rot_atom_done)
             write_now = 1
+            print 'step %s: rotated atom %s around atoms %s and %s in molecule %s by %s pi ' % (i, rot_atom_num, axis_num_1, axis_num_2, rot_mol_num, angle/pi)
 
     elif rot_not == 0:
         """
@@ -102,7 +119,7 @@ for i in range(n_steps):
                                       mov_mol_new[1][0],
                                       mov_mol_new[2][0])):
 
-            if writing == 1:
+            # if writing == 1:
                 # Accept change:
                 molecules[mov_mol_num] = mov_mol_new
                 write_now = 1
@@ -112,13 +129,11 @@ for i in range(n_steps):
                 write_now = 0
             # molecules[mov_mol_num]
 
-
     # # Writing to new file
     if writing == 1 and write_now == 1:
         newfilename = "w6_%s" % i + ".xyz"
         coordinates = ex.unite(molecules)
         ex.writefile(newfilename, mol_name, elements, coordinates) # TODO: find how to configure inputs correctly, with n_steps as part of filename
-
 
 """
 PART II: optimizing energy of the xyz files
@@ -127,12 +142,13 @@ if optimize == 1:
         # # Getting energy and optimizing
     for i in range(n_steps):
         filename = "w6_%s" % i + ".xyz"
+        newfilename = "w6_%s" % i + "optimized.xyz"
         if os.path.isfile('./%s'%filename):
             energies_before.append(mc.get_energy(filename))
 
             mc.find_local_min(5)
 
             energies_after.append(mc.get_energy(filename))
-            mc.save_molecule(filename)
+            mc.save_molecule(newfilename)
 
     print 'Energies after are: \n', np.asarray(energies_after)#,'\nAnd the minimum is: ' min(np.asarray(energies_after))
