@@ -90,7 +90,7 @@ def find_local_min(steps):
     global mol
     global FF
 
-    FF = ob.OBForceField.FindForceField("GAFF")
+    FF = ob.OBForceField.FindForceField("MMFF94")
     # tested both 5 and 25 steps. As far as I remember, 5 steps were enough
     FF.SteepestDescent(steps)
     FF.GetCoordinates(mol.OBMol)

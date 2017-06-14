@@ -51,13 +51,7 @@ for i in range(n_steps):
             rot_atom_num = np.random.choice(2)+1
 
             '''
-            # # Defining which atoms are axes
-            axis_num_1 = (rot_atom_num + 1) % 3
-            axis_num_2 = (rot_atom_num + 2) % 3
-            if axis_num_1 > axis_num_2:
-                axis_num_change = axis_num_1
-                axis_num_1 = axis_num_2
-                axis_num_2 = axis_num_change
+            Defining which atoms are axes
             '''
             if rot_atom_num == 1:
                 axis_num_1 = 0

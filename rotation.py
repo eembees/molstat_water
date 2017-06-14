@@ -27,10 +27,10 @@ def rotation3d(axis1, axis2, point, angle):
 
     #Initialize virtual rotation point rot
     rot = [0.0, 0.0, 0.0]
-    N = map(sum, zip(axis2, axis1_neg)) # axis vector
-    sqsum = (sum(sqrt(N[i]**2) for i in range(3)))
 
     # Axis direction vector (normalized)
+    N = map(sum, zip(axis2, axis1_neg)) # axis vector
+    sqsum = (sum(sqrt(N[i]**2) for i in range(3)))
     direction = [N[i]/sqsum for i in range(3)]
 
     # Simplifying 3d rotation matrix factors - cosine, sine, translation factor
@@ -42,7 +42,7 @@ def rotation3d(axis1, axis2, point, angle):
     y = direction[1]
     z = direction[2]
 
-    # Matrix 'M'[3x3] 3D rotation matrix
+    # Matrix 'D'[3x3] 3D rotation matrix
     d11 = tr*x**2 + co
     d12 = tr*x*y - si*z
     d13 = tr*x*z + si*y
