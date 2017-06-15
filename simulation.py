@@ -1,5 +1,5 @@
 ## simulation.py Version 1.0
-## Written by Magnus Berg Sletfjerding (eembees) and
+## Written by Magnus Berg Sletfjerding (eembees)
 ###########################################################
 """Importing modules"""
 import openbabel as ob
@@ -18,12 +18,12 @@ import molec as mc
 """Running Script for simulation"""
 # # Defining universal variables
 # initial_energy = mc.get_energy()
-n_steps = 1000
+n_steps = 10
 energies_before = []
 energies_after = []
 mol_name, elements, coordinates = ex.readfile('w6.xyz')
 molecules = ex.divide(elements, coordinates)
-d = 0.2
+d = 0.1
 writing = 1 # # CHANGE THIS TO 1 TO WRITE FILES
 optimize = 1
 
@@ -49,6 +49,7 @@ for i in range(n_steps):
             # # Defining which molecule and which atom rotates
             rot_mol_num = np.random.choice(6)
             rot_atom_num = np.random.choice(2)+1
+            # rot_atom_num = 1
 
             '''
             Defining which atoms are axes
@@ -113,13 +114,11 @@ for i in range(n_steps):
                                       mov_mol_new[1][0],
                                       mov_mol_new[2][0])):
 
-            # if writing == 1:
                 # Accept change:
                 molecules[mov_mol_num] = mov_mol_new
                 write_now = 1
             else:
-                # Do opposite transformation?
-
+                # Reject change:
                 write_now = 0
             # molecules[mov_mol_num]
 
@@ -140,9 +139,14 @@ if optimize == 1:
         if os.path.isfile('./%s'%filename):
             energies_before.append(mc.get_energy(filename))
 
-            mc.find_local_min(5)
+            mc.find_local_min(100)
 
             energies_after.append(mc.get_energy(filename))
             mc.save_molecule(newfilename)
-
-    print 'Energies after are: \n', np.asarray(energies_after)#,'\nAnd the minimum is: ' min(np.asarray(energies_after))
+    # Saving energies to file
+    ene_list = np.asarray(energies_after)
+    writing_energy = open('energy_list.txt','w')
+    for x in ene_list:
+        writing_energy.write(str(x))
+        writing_energy.write('\n')
+    print 'Energies after are: \n', np.asarray(energies_after),'\nAnd the minimum is: ', min(np.asarray(energies_after))

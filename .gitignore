@@ -101,4 +101,4 @@ ENV/
 .mypy_cache/
 
 # generated files by program
-.xyz
+*.xyz
