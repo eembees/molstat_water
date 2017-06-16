@@ -18,7 +18,7 @@ import molec as mc
 """Running Script for simulation"""
 # # Defining universal variables
 # initial_energy = mc.get_energy()
-n_steps = 10
+n_steps = 100
 energies_before = []
 energies_after = []
 mol_name, elements, coordinates = ex.readfile('w6.xyz')
@@ -121,7 +121,8 @@ for i in range(n_steps):
                 # Reject change:
                 write_now = 0
             # molecules[mov_mol_num]
-
+        print 'moved %s molecules' %n_molecules_moving
+        
     # # Writing to new file
     if writing == 1 and write_now == 1:
         newfilename = "w6_%s" % i + ".xyz"

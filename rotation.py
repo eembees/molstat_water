@@ -30,7 +30,7 @@ def rotation3d(axis1, axis2, point, angle):
 
     # Axis direction vector (normalized)
     N = map(sum, zip(axis2, axis1_neg)) # axis vector
-    sqsum = (sum(sqrt(N[i]**2) for i in range(3)))
+    sqsum = sqrt(sum((N[i]**2) for i in range(3)))
     direction = [N[i]/sqsum for i in range(3)]
 
     # Simplifying 3d rotation matrix factors - cosine, sine, translation factor

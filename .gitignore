@@ -102,3 +102,4 @@ ENV/
 
 # generated files by program
 *.xyz
+energy_list.txt
