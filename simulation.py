@@ -18,7 +18,7 @@ import molec as mc
 """Running Script for simulation"""
 # # Defining universal variables
 # initial_energy = mc.get_energy()
-n_steps = 100
+n_steps = 500
 energies_before = []
 energies_after = []
 mol_name, elements, coordinates = ex.readfile('w6.xyz')
@@ -34,8 +34,8 @@ PART I: Creating series of randomly generated files (permutations of w6)
 
 for i in range(n_steps):
     # # Generating random value, deciding on rotation or movement
-    rot_not = np.random.choice([0,1])
-    # rot_not = 1
+    # rot_not = np.random.choice([0,1])
+    rot_not = 1
 
     if rot_not == 1:
         """
@@ -122,7 +122,7 @@ for i in range(n_steps):
                 write_now = 0
             # molecules[mov_mol_num]
         print 'moved %s molecules' %n_molecules_moving
-        
+
     # # Writing to new file
     if writing == 1 and write_now == 1:
         newfilename = "w6_%s" % i + ".xyz"
@@ -140,9 +140,11 @@ if optimize == 1:
         if os.path.isfile('./%s'%filename):
             energies_before.append(mc.get_energy(filename))
 
-            mc.find_local_min(100)
+            mc.find_local_min(500)
 
-            energies_after.append(mc.get_energy(filename))
+            # Restricting until after a significant number of steps have passed
+            if i > 100:
+                energies_after.append(mc.get_energy(filename))
             mc.save_molecule(newfilename)
     # Saving energies to file
     ene_list = np.asarray(energies_after)
